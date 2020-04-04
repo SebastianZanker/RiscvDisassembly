@@ -5,7 +5,8 @@
 
 
 // Constructor
-riscv_instruction_reg::riscv_instruction_reg()
+riscv_instruction_reg::riscv_instruction_reg(std::vector<riscv_register*>& regs) :
+	riscv_instruction{ regs }
 {
 
 }

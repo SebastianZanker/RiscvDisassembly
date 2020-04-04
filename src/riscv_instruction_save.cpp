@@ -4,7 +4,8 @@
 #include "riscv_instruction_save.h"
 
 // Constructor
-riscv_instruction_save::riscv_instruction_save()
+riscv_instruction_save::riscv_instruction_save(std::vector<riscv_register*>& regs) :
+	riscv_instruction{ regs }
 {
 
 }

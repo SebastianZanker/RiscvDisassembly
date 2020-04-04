@@ -19,6 +19,12 @@ const unsigned char OPCODE_AUIPC = 0x17;
 const unsigned char OPCODE_JAL = 0x6F;
 const unsigned char OPCODE_JALR = 0x67;
 
+const unsigned int NUM_REGISTERS = 32;
+
+const unsigned char INDEX_SAVE = 0;
+const unsigned char INDEX_LOAD = 1;
+const unsigned char INDEX_REG = 2;
+
 
 vector<unsigned int> riscv_assembly = {
     0x00000093,
@@ -79,66 +85,69 @@ void decode_jalr(unsigned int inst)
     printf("Found JALR instruction\n");
 }
 
+
+// step function for every single instruction
+void step(vector<riscv_instruction*> &ri, unsigned int current_inst)
+{
+    printf("Instruction: 0x%08X\n", current_inst);
+    // getting the opcode
+    unsigned char opcode = current_inst & 0x7F;
+    switch (opcode) {
+    case OPCODE_I:
+        decode_i(current_inst);
+        break;
+    case OPCODE_L:
+        decode_l(current_inst);
+        ri[INDEX_LOAD]->decode(current_inst);
+        break;
+    case OPCODE_S:
+        decode_s(current_inst);
+        ri[INDEX_SAVE]->decode(current_inst);
+        break;
+    case OPCODE_R:
+        decode_r(current_inst);
+        ri[INDEX_REG]->decode(current_inst);
+        break;
+    case OPCODE_B:
+        decode_b(current_inst);
+        break;
+    case OPCODE_LUI:
+        decode_lui(current_inst);
+        break;
+    case OPCODE_AUIPC:
+        decode_auipc(current_inst);
+        break;
+    case OPCODE_JAL:
+        decode_jal(current_inst);
+        break;
+    case OPCODE_JALR:
+        decode_jalr(current_inst);
+        break;
+    default:
+        printf("Unknown instruction\n");
+    }
+    printf("\n");
+}
+
+
 int main()
 {
-    unsigned int current_inst = 0;
-    unsigned char opcode = 0;
+    // vector for the RISCV registers
+    vector<riscv_register*> reg_table(NUM_REGISTERS);
+    for (unsigned int i = 0; i < NUM_REGISTERS; i++) {
+        reg_table[i] = new riscv_register();
+    }
+
+    // classes for decoding
+    vector<riscv_instruction*> ri(3);
 
     // classes for the different sets of instructions
-    riscv_instruction_save* ri_save = new riscv_instruction_save();
-    riscv_instruction_load* ri_load = new riscv_instruction_load();
-    riscv_instruction_reg* ri_reg = new riscv_instruction_reg();
+    ri[INDEX_SAVE] = new riscv_instruction_save(reg_table);
+    ri[INDEX_LOAD] = new riscv_instruction_load(reg_table);
+    ri[INDEX_REG] = new riscv_instruction_reg(reg_table);
 
     for (unsigned int i = 0; i < riscv_assembly.size(); i++) {
-        printf("Instruction: 0x%08X\n", riscv_assembly[i]);
-        current_inst = riscv_assembly[i];
-        // get the opcode
-        opcode = current_inst & 0x7F;
-        switch (opcode){
-            case OPCODE_I:
-                decode_i(current_inst);
-                break;
-            case OPCODE_L:
-                decode_l(current_inst);
-                ri_load->decode(current_inst);
-                break;
-            case OPCODE_S:
-                decode_s(current_inst);
-                ri_save->decode(current_inst);
-                break;
-            case OPCODE_R:
-                decode_r(current_inst);
-                ri_reg->decode(current_inst);
-                break;
-            case OPCODE_B:
-                decode_b(current_inst);
-                break;
-            case OPCODE_LUI:
-                decode_lui(current_inst);
-                break;
-            case OPCODE_AUIPC:
-                decode_auipc(current_inst);
-                break;
-            case OPCODE_JAL:
-                decode_jal(current_inst);
-                break;
-            case OPCODE_JALR:
-                decode_jalr(current_inst);
-                break;
-            default:
-                printf("Unknown instruction\n");
-        }
-        printf("\n");
+        step(ri, riscv_assembly[i]);
     }
 }
 
-// Programm ausführen: STRG+F5 oder Menüeintrag "Debuggen" > "Starten ohne Debuggen starten"
-// Programm debuggen: F5 oder "Debuggen" > Menü "Debuggen starten"
-
-// Tipps für den Einstieg: 
-//   1. Verwenden Sie das Projektmappen-Explorer-Fenster zum Hinzufügen/Verwalten von Dateien.
-//   2. Verwenden Sie das Team Explorer-Fenster zum Herstellen einer Verbindung mit der Quellcodeverwaltung.
-//   3. Verwenden Sie das Ausgabefenster, um die Buildausgabe und andere Nachrichten anzuzeigen.
-//   4. Verwenden Sie das Fenster "Fehlerliste", um Fehler anzuzeigen.
-//   5. Wechseln Sie zu "Projekt" > "Neues Element hinzufügen", um neue Codedateien zu erstellen, bzw. zu "Projekt" > "Vorhandenes Element hinzufügen", um dem Projekt vorhandene Codedateien hinzuzufügen.
-//   6. Um dieses Projekt später erneut zu öffnen, wechseln Sie zu "Datei" > "Öffnen" > "Projekt", und wählen Sie die SLN-Datei aus.

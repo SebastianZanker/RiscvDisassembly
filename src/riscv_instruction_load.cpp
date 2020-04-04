@@ -4,7 +4,8 @@
 #include "riscv_instruction_load.h"
 
 // Constructor
-riscv_instruction_load::riscv_instruction_load()
+riscv_instruction_load::riscv_instruction_load(std::vector<riscv_register*>& regs) :
+	riscv_instruction{ regs }
 {
 
 }

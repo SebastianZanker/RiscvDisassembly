@@ -47,14 +47,14 @@ class riscv_instruction
 {
 
 public:
-	riscv_instruction();
+	riscv_instruction(std::vector<riscv_register*> &regs);
 	virtual void decode(unsigned int inst) = 0;
 
 private:
 	unsigned int inst_occurrence;
 
 	// keep track of all registers
-	std::vector<riscv_register> registers;
+	std::vector<riscv_register*> &registers;
 
 
 protected:

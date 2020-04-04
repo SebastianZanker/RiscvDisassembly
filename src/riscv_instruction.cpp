@@ -3,15 +3,9 @@
 #include "riscv_instruction.h"
 
 // Constructor
-riscv_instruction::riscv_instruction() :
-	inst_occurrence(0)
+riscv_instruction::riscv_instruction(std::vector<riscv_register*> &regs) :
+	inst_occurrence(0), registers(regs)
 {
-	// initialize the vector
-	registers.reserve(10); // Reserve memory not to allocate it 10 times...
-	for (int i = 0; i < 10; ++i)
-	{
-		registers.push_back(riscv_register());
-	}
 }
 
 

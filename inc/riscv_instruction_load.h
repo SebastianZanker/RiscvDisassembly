@@ -11,6 +11,6 @@ class riscv_instruction_load : public riscv_instruction
 {
 
 public:
-	riscv_instruction_load();
+	riscv_instruction_load(std::vector<riscv_register*>& regs);
 	void decode(unsigned int inst);
 };

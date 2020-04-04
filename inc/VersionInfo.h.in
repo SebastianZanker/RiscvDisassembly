@@ -1,0 +1,4 @@
+// Version info for the RISCV Disassembly project
+
+#define RV_DISASSEMBLY_VERSION_MAJOR @RiscvDisassembly_VERSION_MAJOR@
+#define RV_DISASSEMBLY_VERSION_MINOR @RiscvDisassembly_VERSION_MINOR@

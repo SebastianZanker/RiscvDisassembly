@@ -54,6 +54,8 @@ void riscv_instruction_load::decode(unsigned int inst)
 	// registers:
 	printf("Base Memory Address: x%d, Offset: 0x%04X\n", rs1, immediate);
 	printf("Destination register: x%d\n", rd);
-	// increase the occurrence for save instructions
-	inc_inst_occurrence();
+
+	// calculate statistics
+	registers[rs1]->inc_src();
+	registers[rd]->inc_dest();
 }

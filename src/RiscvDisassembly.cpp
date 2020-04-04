@@ -133,6 +133,18 @@ void step(vector<riscv_instruction*> &ri, unsigned int current_inst)
 }
 
 
+// print statistics
+void print_statistics(vector<riscv_register*>& regs)
+{
+    unsigned int num_src = 0;
+    unsigned int num_dest = 0;
+    for (unsigned int i = 0; i < regs.size(); i++) {
+        regs[i]->get_statistics(num_src, num_dest);
+        printf("Register %d: used as source: %d, used as destination: %d\n", i, num_src, num_dest);
+    }
+}
+
+
 int main(int argc, char* argv[])
 {
     // ToDo: Debugging in VS
@@ -164,5 +176,9 @@ int main(int argc, char* argv[])
         unsigned int current_instruction = std::strtoul(current_instruction_str.c_str(), 0, 16);
         step(ri, current_instruction);
     }
+
+    // print statistics after whole file is processed
+    print_statistics(reg_table);
+
 }
 

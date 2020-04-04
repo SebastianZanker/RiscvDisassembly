@@ -16,6 +16,7 @@ void riscv_instruction_reg::decode(unsigned int inst)
 {
 	// base memory address
 	unsigned char rs1;
+	unsigned char rs2;
 	// data to be stored
 	unsigned char rd;
 	// 12 bit immediate value
@@ -28,14 +29,8 @@ void riscv_instruction_reg::decode(unsigned int inst)
 	func3 = (inst >> inst_fields_e::e_funct3) & 0x07;
 	func7 = (inst >> inst_fields_e::e_funct3) & 0x07;
 	rs1 = (inst >> inst_fields_e::e_rs1) & 0x1F;
-	rs1 = (inst >> inst_fields_e::e_rs2) & 0x1F;
+	rs2 = (inst >> inst_fields_e::e_rs2) & 0x1F;
 	rd = (inst >> inst_fields_e::e_rd) & 0x1F;
-	immediate = (inst >> 20) & 0xFFF;
-	// immediate is signed
-	if ((immediate >> 11) & 0x01)
-	{
-		immediate |= 0xF << 12;
-	}
 
 	switch (func3) {
 	case funct3_reg_e::e_ADD_SUB_e:
@@ -67,8 +62,11 @@ void riscv_instruction_reg::decode(unsigned int inst)
 	}
 
 	// registers:
-	printf("Base Memory Address: x%d, Offset: 0x%04X\n", rs1, immediate);
+	printf("Source register 1: %d, source register 2: %d\n", rs1, rs2);
 	printf("Destination register: x%d\n", rd);
-	// increase the occurrence for save instructions
-	inc_inst_occurrence();
+
+	// calculate statistics
+	registers[rs1]->inc_src();
+	registers[rs2]->inc_src();
+	registers[rd]->inc_dest();
 }

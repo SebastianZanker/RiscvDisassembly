@@ -42,6 +42,8 @@ void riscv_instruction_save::decode(unsigned int inst)
 	// registers:
 	printf("Base Memory Address: x%d, Offset: 0x%04X\n", rs1, immediate);
 	printf("Date to be stored: x%d\n", rs2);
-	// increase the occurrence for save instructions
-	inc_inst_occurrence();
+
+	// calculate statistics
+	registers[rs1]->inc_src();
+	registers[rs2]->inc_src();
 }

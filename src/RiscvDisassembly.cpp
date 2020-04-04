@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <string>
+
 #include "riscv_instruction_save.h"
 #include "riscv_instruction_load.h"
 #include "riscv_instruction_reg.h"
@@ -130,8 +133,13 @@ void step(vector<riscv_instruction*> &ri, unsigned int current_inst)
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
+    // ToDo: Debugging in VS
+    if (argc != 2) {
+        printf("Usage: %s assembler_file", argv[0]);
+    }
+
     // vector for the RISCV registers
     vector<riscv_register*> reg_table(NUM_REGISTERS);
     for (unsigned int i = 0; i < NUM_REGISTERS; i++) {
@@ -146,8 +154,15 @@ int main()
     ri[INDEX_LOAD] = new riscv_instruction_load(reg_table);
     ri[INDEX_REG] = new riscv_instruction_reg(reg_table);
 
-    for (unsigned int i = 0; i < riscv_assembly.size(); i++) {
-        step(ri, riscv_assembly[i]);
+    // until now: hardcoded
+    std::ifstream file("../../../example/example.hex");
+    std::string str;
+    while (std::getline(file, str)) {
+        // add 0x to the string
+        string current_instruction_str = "0x";
+        current_instruction_str.append(str);
+        unsigned int current_instruction = std::strtoul(current_instruction_str.c_str(), 0, 16);
+        step(ri, current_instruction);
     }
 }
 

@@ -26,6 +26,9 @@ configure_file(inc/VersionInfo.h.in VersionInfo.h)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-
 # add the executable
 add_executable(RiscvDisassembly ${SOURCE_FILES})
+
+set_target_properties(RiscvDisassembly PROPERTIES 
+    VS_DEBUGGER_COMMAND "$(TargetPath)"
+    VS_DEBUGGER_COMMAND_ARGUMENTS "../../../example/exfile.hex")

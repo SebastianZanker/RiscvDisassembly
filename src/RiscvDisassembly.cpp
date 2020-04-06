@@ -152,6 +152,8 @@ int main(int argc, char* argv[])
         printf("Usage: %s assembler_file", argv[0]);
     }
 
+    printf("Chosen Hex file: %s", argv[1]);
+
     // vector for the RISCV registers
     vector<riscv_register*> reg_table(NUM_REGISTERS);
     for (unsigned int i = 0; i < NUM_REGISTERS; i++) {

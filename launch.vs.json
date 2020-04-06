@@ -1,0 +1,13 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "RiscvDisassembly.exe (.\\out\\build\\x64-Debug\\RiscvDisassembly.exe)",
+      "name": "RiscvDisassembly.exe (.\\out\\build\\x64-Debug\\RiscvDisassembly.exe)",
+      "args": ["${cmake.remoteCopySources}"]
+    }
+  ]
+}

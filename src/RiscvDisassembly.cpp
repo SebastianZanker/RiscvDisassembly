@@ -168,8 +168,12 @@ int main(int argc, char* argv[])
     ri[INDEX_LOAD] = new riscv_instruction_load(reg_table);
     ri[INDEX_REG] = new riscv_instruction_reg(reg_table);
 
-    // until now: hardcoded
-    std::ifstream file("../../../example/example.hex");
+    std::ifstream file(argv[1]);
+    if (!file) {
+        printf("File not found. Exit ...\n");
+        return 1;
+    }
+
     std::string str;
     while (std::getline(file, str)) {
         // add 0x to the string
